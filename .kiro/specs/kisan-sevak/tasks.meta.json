@@ -1,0 +1,212 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Fix package.json — replace Expo-incompatible dependencies": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218043739
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218648481
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794219124380
+      }
+    ],
+    "2.1 Overwrite `src/constants/colors.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218043895
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218081271
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218463411
+      }
+    ],
+    "2.2 Create `src/constants/strings.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044003
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218082151
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218537780
+      }
+    ],
+    "3.1 Implement all 7 exported functions with Promise-shaped return values": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044104
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218082280
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218538068
+      }
+    ],
+    "4.1 Overwrite `src/components/Header.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044199
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218561965
+      }
+    ],
+    "4.2 Overwrite `src/components/Card.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044299
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218563938
+      }
+    ],
+    "4.3 Overwrite `src/components/PriceCard.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044399
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218568067
+      }
+    ],
+    "4.4 Overwrite `src/components/WeatherCard.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044513
+      },
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218568228
+      }
+    ],
+    "5. Update `src/navigation/AppNavigator.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044660
+      }
+    ],
+    "6. Rewrite `src/screens/SplashScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044750
+      }
+    ],
+    "7. Rewrite `src/screens/HomeScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044854
+      }
+    ],
+    "8. Rewrite `src/screens/CropDiseaseScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218044946
+      }
+    ],
+    "9. Rewrite `src/screens/MandiPricesScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045041
+      }
+    ],
+    "10. Rewrite `src/screens/WeatherAdvisoryScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045147
+      }
+    ],
+    "11. Rewrite `src/screens/AIChatScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045249
+      }
+    ],
+    "12. Rewrite `src/screens/MandiDetailScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045315
+      }
+    ],
+    "13. Rewrite `src/screens/ProfileScreen.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045380
+      }
+    ],
+    "14. Update `App.js` and final wiring": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045440
+      }
+    ],
+    "15. Final checkpoint — Ensure all screens run without errors": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218045498
+      }
+    ],
+    "2. Create/update constants files": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218537913
+      }
+    ],
+    "3. Create `src/services/demoApi.js`": [
+      {
+        "executionId": "2b52e857-af8e-4c4d-bea1-7bbffa0142fb",
+        "chatSessionId": "sess_a8b97a59-54bd-4832-b904-b11ae8fc743b",
+        "timestamp": 1794218538178
+      }
+    ]
+  }
+}
