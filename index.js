@@ -32,7 +32,7 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  console.error(error);
+  console.error(`${error.name || 'Error'}: ${error.message || 'Unknown error'}`);
   if (res.headersSent) return next(error);
   res.status(error.status || 500).json({
     error: error.message || 'सर्वर में अनपेक्षित त्रुटि हुई',

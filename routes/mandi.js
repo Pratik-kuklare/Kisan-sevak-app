@@ -56,6 +56,10 @@ async function fetchLivePrices(crop) {
   const response = await axios.get(`https://api.data.gov.in/resource/${resourceId}`, {
     params,
     timeout: 15000,
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'KisanSevak/1.0 (+https://kisan-sevak-app-production.up.railway.app)',
+    },
   });
   return (response.data.records || []).map(normalize).filter((item) => item.marketPrice !== null);
 }
