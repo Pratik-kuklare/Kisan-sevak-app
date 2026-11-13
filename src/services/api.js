@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://10.0.2.2:3000';
+const API_BASE_URL = 'https://kisan-sevak-app-production.up.railway.app';
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
