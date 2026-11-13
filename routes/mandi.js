@@ -71,7 +71,7 @@ router.get('/', async (req, res, next) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
       return res.status(502).json({ error: 'लाइव मंडी API key अमान्य है' });
     }
-    if (error.code === 'EHOSTUNREACH' || error.code === 'ETIMEDOUT' || error.code === 'ECONNABORTED') {
+    if (['EHOSTUNREACH', 'ECONNREFUSED', 'ETIMEDOUT', 'ECONNABORTED'].includes(error.code)) {
       return res.status(503).json({ error: 'लाइव मंडी सेवा इस समय नेटवर्क से उपलब्ध नहीं है, कृपया कुछ देर बाद फिर प्रयास करें' });
     }
     next(error);
@@ -85,7 +85,7 @@ router.get('/all', async (req, res, next) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
       return res.status(502).json({ error: 'लाइव मंडी API key अमान्य है' });
     }
-    if (error.code === 'EHOSTUNREACH' || error.code === 'ETIMEDOUT' || error.code === 'ECONNABORTED') {
+    if (['EHOSTUNREACH', 'ECONNREFUSED', 'ETIMEDOUT', 'ECONNABORTED'].includes(error.code)) {
       return res.status(503).json({ error: 'लाइव मंडी सेवा इस समय नेटवर्क से उपलब्ध नहीं है, कृपया कुछ देर बाद फिर प्रयास करें' });
     }
     next(error);
