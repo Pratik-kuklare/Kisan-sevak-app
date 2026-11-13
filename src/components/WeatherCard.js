@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Colors, Typography } from '../constants/colors';
-import { Feather as Icon } from '@expo/vector-icons';
+import Icon from './AppIcon';
 
 // Weather card for forecast
 const WeatherCard = ({ day, date, temp, condition, icon, advice }) => {

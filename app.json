@@ -36,7 +36,8 @@
     "githubUrl": "https://github.com/yourusername/kisan-sevak",
     "plugins": [
       "expo-image-picker",
-      "expo-asset"
+      "expo-asset",
+      "expo-font"
     ],
     "extra": {
       "eas": {

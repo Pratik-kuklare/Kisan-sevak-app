@@ -1,0 +1,26 @@
+const API_BASE_URL = 'http://10.0.2.2:3000';
+
+async function request(path, options = {}) {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+    ...options,
+  });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.error || 'API अनुरोध विफल हुआ');
+  return body;
+}
+
+export const api = {
+  getWeather: (city) => request(`/api/weather?city=${encodeURIComponent(city)}`),
+  getMandiPrices: () => request('/api/mandi/all'),
+  sendChat: (message, language = 'hindi') => request('/api/chat', {
+    method: 'POST',
+    body: JSON.stringify({ message, language }),
+  }),
+  analyzeDisease: async (imageBase64) => request('/api/disease', {
+    method: 'POST',
+    body: JSON.stringify({ image: imageBase64 }),
+  }),
+};
+
+export { API_BASE_URL };

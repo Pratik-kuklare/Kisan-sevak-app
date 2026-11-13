@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors, Typography } from '../constants/colors';
-import { Feather as Icon } from '@expo/vector-icons';
+import Icon from './AppIcon';
 
 // Card component for dashboard items
 const Card = ({ title, subtitle, icon, color, onPress }) => {

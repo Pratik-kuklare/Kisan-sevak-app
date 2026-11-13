@@ -1,122 +1,196 @@
-# Kisan Sevak (किसान सेवक)
+# Kisan Sevak REST API
 
-An AI-powered farming advisory app for Indian farmers built with React Native (Expo).
+JSON-only Node.js + Express backend for the Kisan Sevak React Native mobile
+application. This server does not serve HTML pages or frontend content.
 
-## App Features
+## Features
 
-### Core Features:
-1. **Crop Disease Detection** - AI-powered image analysis for crop diseases
-2. **Mandi Price Information** - Real-time market prices for agricultural produce
-3. **Weather Advisory** - 7-day weather forecast with farming recommendations
-4. **AI Chat Advisor** - Hindi language chatbot for farming queries
-5. **Personal Profile** - Farmer profile with crop tracking
+- OpenWeatherMap weather data with Hindi farming advice
+- Live mandi prices from the Government of India data.gov.in API with MSP comparison
+- Google Gemini farming assistant chat
+- Google Gemini Vision crop disease analysis
+- 10 Indian government farmer schemes
+- In-memory farmer profiles
+- CORS enabled for React Native clients
 
-### Screens:
-- Splash/Loading Screen
-- Home Dashboard
-- Crop Disease Detection
-- Mandi Prices
-- Weather Advisory
-- AI Chat Advisor
-- Mandi Detail
-- Profile/Settings
+## Run locally
 
-## Technology Stack
-
-- **Frontend**: React Native (Expo)
-- **Navigation**: React Navigation (Stack + Bottom Tabs)
-- **Icons**: Expo Vector Icons
-- **UI Components**: Custom built with design system
-- **State Management**: Local state (no Redux/Context API)
-- **Language**: Hindi (Devanagari) with English tech labels
-
-## Design System
-
-### Colors:
-- Primary Green: #1B5E20
-- Secondary Green: #4CAF50
-- Accent Amber: #FF8F00
-- Background: #F1F8E9
-- Surface White: #FFFFFF
-
-### Typography:
-- Display/Headers: Noto Sans (Bold)
-- Body: Roboto (Regular)
-- Hindi Text: Noto Sans Devanagari
-
-## Project Structure
-
-```
-src/
-├── screens/           # 8 main screens
-├── components/        # Reusable UI components
-├── constants/         # Colors, demo data, typography
-├── navigation/        # Navigation configuration
-└── assets/           # Images, fonts, icons
-```
-
-## Installation
-
-1. Install dependencies:
 ```bash
-cd KisanSevak
 npm install
+copy .env.example .env
+npm start
 ```
 
-2. Start the development server:
-```bash
-npx expo start
+Set these values in `.env`:
+
+```env
+PORT=3000
+OPENWEATHER_API_KEY=your_openweathermap_key
+GEMINI_API_KEY=your_gemini_key
+GEMINI_CHAT_MODEL=gemini-3.8-flash
+GEMINI_VISION_MODEL=gemini-3.8-flash
+DATA_GOV_IN_API_KEY=your_data_gov_in_key
+MANDI_RESOURCE_ID=9ef84268-d588-465a-a308-a864a43d0070
 ```
 
-3. Run on Android device/emulator:
-```bash
-npx expo start --android
+The API listens on `http://localhost:3000` or the port supplied by `PORT`.
+Every endpoint returns JSON, including the health response and errors.
+
+## Deploy on Railway
+
+1. Create a Railway project from this repository.
+2. Add `OPENWEATHER_API_KEY`, `GEMINI_API_KEY`, and `DATA_GOV_IN_API_KEY` as Railway variables.
+3. Railway uses the `npm start` command automatically.
+4. Railway supplies `PORT` automatically.
+5. Use the generated public URL in the React Native app.
+
+## API endpoints
+
+### Health response
+
+```http
+GET /
 ```
 
-## Dependencies
+```json
+{
+  "name": "Kisan Sevak API",
+  "status": "चल रहा है"
+}
+```
 
-- @react-navigation/native
-- @react-navigation/stack
-- @react-navigation/bottom-tabs
-- @expo/vector-icons
-- expo-linear-gradient
-- expo-image-picker
-- react-native-svg
-- lottie-react-native
-- @react-native-async-storage/async-storage
+### Weather
 
-## Features Implemented
+```http
+GET /api/weather?city=Pune
+```
 
-✅ Complete Hindi language interface (Devanagari Unicode)  
-✅ 8 fully functional screens  
-✅ Bottom tab navigation with 4 main tabs  
-✅ Stack navigation for detail screens  
-✅ Premium agricultural green color theme  
-✅ Pixel-perfect UI design  
-✅ Demo data for all features  
-✅ Camera and gallery photo selection with permissions  
-✅ Crop filters, static AI replies, and profile action alerts  
-✅ Reusable components (Header, Card, WeatherCard, PriceCard)  
-✅ Responsive design for Android 8+  
-✅ No iOS-specific code (Android only)  
+Returns temperature, humidity, wind speed, description, rain forecast and
+Hindi farming advice. Requires `OPENWEATHER_API_KEY`.
 
-## Usage Notes
+### Mandi prices
 
-- All data is currently hardcoded for demo purposes
-- In production, integrate with real APIs for:
-  - Weather data (OpenWeatherMap, IMD)
-  - Mandi prices (Government APIs)
-  - Crop disease detection (TensorFlow Lite)
-  - AI chat (GPT/LLM APIs)
-- Implement push notifications for price alerts
+```http
+GET /api/mandi?crop=wheat
+GET /api/mandi/all
+```
 
-## Target Audience
+Live records are fetched from the Government of India data.gov.in resource;
+there is no demo/fallback price data. Create a free data.gov.in account and
+API key, then set `DATA_GOV_IN_API_KEY`. The default resource ID can be
+overridden with `MANDI_RESOURCE_ID` if the portal changes it.
 
-- Rural Indian farmers
-- Low-tech users
-- Android 8+ devices
-- Hindi speaking population
+Supported crops: `wheat`, `rice`, `tomato`, `onion`, `potato`, `soybean`,
+`mustard`, `cotton`, `maize`, and `chickpea`.
 
-## License
+Example:
 
-© 2025 Kisan Sevak
+```json
+{
+  "crop": "wheat",
+  "nameHindi": "गेहूं",
+  "marketPrice": 2450,
+  "msp": 2425,
+  "unit": "रुपये प्रति क्विंटल",
+  "mspComparison": "MSP से ऊपर"
+}
+```
+
+### AI chat
+
+```http
+POST /api/chat
+Content-Type: application/json
+```
+
+Request:
+
+```json
+{
+  "message": "गेहूं में पानी कब दें?",
+  "language": "hindi"
+}
+```
+
+Response:
+
+```json
+{
+  "response": "गेहूं में मिट्टी की नमी देखकर सिंचाई करें। खेत में पानी जमा न होने दें।"
+}
+```
+
+Requires `GEMINI_API_KEY`.
+
+### Crop disease detection
+
+```http
+POST /api/disease
+Content-Type: application/json
+```
+
+Request:
+
+```json
+{
+  "image": "<base64 encoded image>"
+}
+```
+
+Returns `diseaseName`, `symptoms`, `treatment`, and `healthy` in Hindi.
+The image may be raw base64 or a `data:image/...;base64,...` value.
+Requires `GEMINI_API_KEY`.
+
+### Government schemes
+
+```http
+GET /api/schemes
+```
+
+Returns 10 schemes with name, benefit, eligibility and official link,
+including PM-KISAN, PM Fasal Bima, KCC, PM-KUSUM, PM Krishi Sinchai Yojana,
+Soil Health Card and other schemes.
+
+### Farmer profile
+
+```http
+POST /api/profile
+Content-Type: application/json
+```
+
+Request:
+
+```json
+{
+  "phone": "9876543210",
+  "name": "राम",
+  "state": "महाराष्ट्र",
+  "crops": ["wheat"],
+  "landSize": 2
+}
+```
+
+Retrieve the profile:
+
+```http
+GET /api/profile/9876543210
+```
+
+Profiles are stored in memory only and are lost when the server restarts.
+
+## Error format
+
+Invalid requests, missing API keys, unknown routes and upstream failures use
+JSON responses such as:
+
+```json
+{
+  "error": "city आवश्यक है"
+}
+```
+
+## Mobile app development
+
+The existing Expo app is separate from this backend. If it is needed for local
+development, use `npm run mobile` or `npm run mobile:android`; these commands
+do not affect the API server or Railway deployment.
