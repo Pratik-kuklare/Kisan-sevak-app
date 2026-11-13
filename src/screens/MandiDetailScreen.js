@@ -13,7 +13,7 @@ const MandiDetailScreen = ({ route, navigation }) => {
           <View style={styles.card}>
             <Text style={styles.title}>{item.nameHindi}</Text>
             <Text style={styles.price}>₹{item.marketPrice}/क्विंटल</Text>
-            <Text>मंडी: {item.market || 'उपलब्ध नहीं'}</Text>
+            <Text>मंडी: {item.mandi || item.market || 'उपलब्ध नहीं'}</Text>
             <Text>जिला: {item.district || 'उपलब्ध नहीं'}</Text>
             <Text>राज्य: {item.state || 'उपलब्ध नहीं'}</Text>
             <Text>न्यूनतम भाव: ₹{item.minPrice ?? 'उपलब्ध नहीं'}</Text>

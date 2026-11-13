@@ -17,17 +17,17 @@ const MandiPricesScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Header title="लाइव मंडी भाव" showBack onBackPress={() => navigation.goBack()} />
       <ScrollView style={styles.content}>
-        <Text style={styles.subtitle}>सरकारी मंडी डेटा से प्राप्त नवीनतम भाव</Text>
+        <Text style={styles.subtitle}>संदर्भ मंडी भाव (लाइव अपडेट उपलब्ध नहीं)</Text>
         {error ? <Text style={styles.error}>{error}</Text> : null}
         {!prices.length && !error ? <ActivityIndicator color={Colors.primaryGreen} /> : null}
         {prices.map((item, index) => (
           <TouchableOpacity key={`${item.crop}-${item.market}-${index}`} onPress={() => navigation.navigate('MandiDetail', { item })}>
             <PriceCard
-              crop={item.nameHindi}
-              price={item.marketPrice ? `₹${item.marketPrice}/क्विंटल` : 'उपलब्ध नहीं'}
+              crop={item.hindi}
+              price={item.price ? `₹${item.price}/क्विंटल` : 'उपलब्ध नहीं'}
               change={item.mspComparison}
-              market={item.market || item.district}
-              state={item.state}
+              market={item.mandi}
+              state={item.state === 'national' ? 'राष्ट्रीय औसत' : item.state}
             />
           </TouchableOpacity>
         ))}

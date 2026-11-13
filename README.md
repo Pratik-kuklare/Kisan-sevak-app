@@ -6,7 +6,7 @@ application. This server does not serve HTML pages or frontend content.
 ## Features
 
 - OpenWeatherMap weather data with Hindi farming advice
-- Live mandi prices from the Government of India data.gov.in API with MSP comparison
+- Mandi reference prices for crops and states with MSP comparison
 - Google Gemini farming assistant chat
 - Google Gemini Vision crop disease analysis
 - 10 Indian government farmer schemes
@@ -29,8 +29,6 @@ OPENWEATHER_API_KEY=your_openweathermap_key
 GEMINI_API_KEY=your_gemini_key
 GEMINI_CHAT_MODEL=gemini-3.8-flash
 GEMINI_VISION_MODEL=gemini-3.8-flash
-DATA_GOV_IN_API_KEY=your_data_gov_in_key
-MANDI_RESOURCE_ID=9ef84268-d588-465a-a308-a864a43d0070
 ```
 
 The API listens on `http://localhost:3000` or the port supplied by `PORT`.
@@ -39,7 +37,7 @@ Every endpoint returns JSON, including the health response and errors.
 ## Deploy on Railway
 
 1. Create a Railway project from this repository.
-2. Add `OPENWEATHER_API_KEY`, `GEMINI_API_KEY`, and `DATA_GOV_IN_API_KEY` as Railway variables.
+2. Add `OPENWEATHER_API_KEY` and `GEMINI_API_KEY` as Railway variables.
 3. Railway uses the `npm start` command automatically.
 4. Railway supplies `PORT` automatically.
 5. Use the generated public URL in the React Native app.
@@ -75,10 +73,10 @@ GET /api/mandi?crop=wheat
 GET /api/mandi/all
 ```
 
-Live records are fetched from the Government of India data.gov.in resource;
-there is no demo/fallback price data. Create a free data.gov.in account and
-API key, then set `DATA_GOV_IN_API_KEY`. The default resource ID can be
-overridden with `MANDI_RESOURCE_ID` if the portal changes it.
+Mandi prices are reference values bundled with the application because the
+official live provider is unavailable from the current Railway deployment.
+They are not real-time market quotes. Replace this dataset with an active
+official or commercial provider before using it for trading decisions.
 
 Supported crops: `wheat`, `rice`, `tomato`, `onion`, `potato`, `soybean`,
 `mustard`, `cotton`, `maize`, and `chickpea`.
