@@ -9,8 +9,25 @@ import { api } from '../services/api';
 
 const CropDiseaseScreen = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [pendingUri, setPendingUri] = useState(null);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const analyzeImage = async () => {
+    if (!pendingUri || loading) return;
+    setLoading(true);
+    setError('');
+    setResult(null);
+    try {
+      const base64 = await FileSystem.readAsStringAsync(pendingUri, { encoding: FileSystem.EncodingType.Base64 });
+      setResult(await api.analyzeDisease(`data:image/jpeg;base64,${base64}`));
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const pickImage = async (source) => {
     const permission = source === 'camera'
@@ -26,16 +43,9 @@ const CropDiseaseScreen = ({ navigation }) => {
     if (!pickerResult.canceled) {
       const uri = pickerResult.assets[0].uri;
       setSelectedImage(uri);
+      setPendingUri(uri);
       setResult(null);
-      setLoading(true);
-      try {
-        const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-        setResult(await api.analyzeDisease(`data:image/jpeg;base64,${base64}`));
-      } catch (error) {
-        Alert.alert('विश्लेषण विफल', error.message);
-      } finally {
-        setLoading(false);
-      }
+      setError('');
     }
   };
 
@@ -51,7 +61,14 @@ const CropDiseaseScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.button} onPress={() => pickImage('camera')}><Text style={styles.buttonText}>कैमरा</Text></TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.secondary]} onPress={() => pickImage('gallery')}><Text style={styles.secondaryText}>गैलरी</Text></TouchableOpacity>
         </View>
+        {pendingUri ? <TouchableOpacity style={styles.sendButton} onPress={analyzeImage}><Text style={styles.buttonText}>तस्वीर भेजें और जांचें</Text></TouchableOpacity> : null}
         {loading ? <ActivityIndicator color={Colors.primaryGreen} /> : null}
+        {error ? (
+          <View style={styles.errorBox}>
+            <Text style={styles.error}>{error}</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={analyzeImage}><Text style={styles.secondaryText}>फिर कोशिश करें</Text></TouchableOpacity>
+          </View>
+        ) : null}
         {result ? (
           <View style={styles.result}>
             <Text style={styles.title}>{result.healthy ? 'फसल स्वस्थ है' : result.diseaseName}</Text>
@@ -75,6 +92,10 @@ const styles = StyleSheet.create({
   buttonText: { color: Colors.surfaceWhite, fontWeight: '600' },
   secondary: { backgroundColor: Colors.surfaceWhite, borderWidth: 1, borderColor: Colors.primaryGreen },
   secondaryText: { color: Colors.primaryGreen, fontWeight: '600' },
+  sendButton: { backgroundColor: Colors.primaryGreen, borderRadius: 10, padding: 14, alignItems: 'center', marginBottom: 16 },
+  errorBox: { backgroundColor: '#FDECEC', borderRadius: 10, padding: 14, marginBottom: 16 },
+  error: { color: Colors.errorRed, marginBottom: 10 },
+  retryButton: { backgroundColor: Colors.surfaceWhite, borderRadius: 8, padding: 10, alignItems: 'center' },
   result: { backgroundColor: Colors.surfaceWhite, borderRadius: 14, padding: 18 },
   title: { color: Colors.primaryGreen, fontSize: Typography.subtitle, fontWeight: 'bold', marginBottom: 16 },
   label: { color: Colors.textPrimary, fontWeight: '600', marginTop: 12, marginBottom: 4 },

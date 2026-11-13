@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import * as Location from 'expo-location';
 import { Colors, Typography } from '../constants/colors';
 import Header from '../components/Header';
 import Icon from '../components/AppIcon';
@@ -10,7 +11,15 @@ const WeatherAdvisoryScreen = ({ navigation }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.getWeather('Pune').then(setWeather).catch((requestError) => setError(requestError.message));
+    (async () => {
+      const permission = await Location.requestForegroundPermissionsAsync();
+      if (!permission.granted) throw new Error('स्थानीय मौसम के लिए लोकेशन अनुमति आवश्यक है');
+      const position = await Location.getCurrentPositionAsync({});
+      return api.getWeather({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    })().then(setWeather).catch((requestError) => setError(requestError.message));
   }, []);
 
   return (
@@ -35,6 +44,14 @@ const WeatherAdvisoryScreen = ({ navigation }) => {
             {weather.farmingAdvice.map((advice) => (
               <View key={advice} style={styles.advice}><Icon name="leaf" size={20} color={Colors.primaryGreen} /><Text style={styles.adviceText}>{advice}</Text></View>
             ))}
+            <Text style={styles.sectionTitle}>7 दिन का पूर्वानुमान</Text>
+            {weather.forecast.map((day) => (
+              <View key={day.date} style={styles.forecast}>
+                <Text style={styles.forecastDate}>{day.date}</Text>
+                <Text>{Math.round(day.minTemperature)}° - {Math.round(day.maxTemperature)}°C</Text>
+                <Text>बारिश: {day.rainProbability}% ({day.rainMillimeters} mm)</Text>
+              </View>
+            ))}
           </>
         ) : null}
       </ScrollView>
@@ -53,6 +70,8 @@ const styles = StyleSheet.create({
   sectionTitle: { color: Colors.textPrimary, fontSize: Typography.subtitle, fontWeight: '600', marginVertical: 20 },
   advice: { backgroundColor: Colors.surfaceWhite, borderRadius: 12, padding: 16, flexDirection: 'row', marginBottom: 10 },
   adviceText: { flex: 1, color: Colors.textPrimary, marginLeft: 12, lineHeight: 22 },
+  forecast: { backgroundColor: Colors.surfaceWhite, borderRadius: 10, padding: 14, marginBottom: 8, gap: 5 },
+  forecastDate: { color: Colors.primaryGreen, fontWeight: '600' },
   error: { color: Colors.errorRed, padding: 16 },
 });
 

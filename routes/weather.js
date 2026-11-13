@@ -4,6 +4,7 @@ const axios = require('axios');
 const router = express.Router();
 const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
+const openMeteoUrl = 'https://api.open-meteo.com/v1/forecast';
 
 function farmingAdvice(weather, rainMillimeters) {
   const advice = [];
@@ -16,17 +17,33 @@ function farmingAdvice(weather, rainMillimeters) {
 
 router.get('/', async (req, res, next) => {
   const city = typeof req.query.city === 'string' ? req.query.city.trim() : '';
+  const latitude = Number(req.query.latitude);
+  const longitude = Number(req.query.longitude);
   const apiKey = process.env.OPENWEATHER_API_KEY;
-  if (!city) return res.status(400).json({ error: 'city आवश्यक है' });
+  if (!city && (!Number.isFinite(latitude) || !Number.isFinite(longitude))) {
+    return res.status(400).json({ error: 'city या latitude और longitude आवश्यक हैं' });
+  }
   if (!apiKey) return res.status(503).json({ error: 'मौसम सेवा की API key कॉन्फ़िगर नहीं है' });
 
   try {
-    const params = { q: city, appid: apiKey, units: 'metric', lang: 'hi' };
+    const params = {
+      appid: apiKey, units: 'metric', lang: 'hi',
+      ...(city ? { q: city } : { lat: latitude, lon: longitude }),
+    };
     const [currentResponse, forecastResponse] = await Promise.all([
       axios.get(weatherUrl, { params }),
       axios.get(forecastUrl, { params }),
     ]);
     const weather = currentResponse.data;
+    const coordinates = { latitude: weather.coord.lat, longitude: weather.coord.lon };
+    const dailyResponse = await axios.get(openMeteoUrl, {
+      params: {
+        ...coordinates,
+        daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum',
+        timezone: 'auto',
+        forecast_days: 7,
+      },
+    });
     const rainForecast = forecastResponse.data.list
       .slice(0, 8)
       .reduce((total, item) => total + (item.rain?.['3h'] || 0), 0);
@@ -43,6 +60,15 @@ router.get('/', async (req, res, next) => {
       description: weather.weather[0]?.description || 'मौसम उपलब्ध नहीं है',
       rainForecast: { millimeters: Number(rainMillimeters.toFixed(1)), next24Hours: rainMillimeters > 0 },
       farmingAdvice: farmingAdvice(weather, rainMillimeters),
+      coordinates,
+      forecast: dailyResponse.data.daily.time.map((date, index) => ({
+        date,
+        maxTemperature: dailyResponse.data.daily.temperature_2m_max[index],
+        minTemperature: dailyResponse.data.daily.temperature_2m_min[index],
+        rainProbability: dailyResponse.data.daily.precipitation_probability_max[index],
+        rainMillimeters: dailyResponse.data.daily.precipitation_sum[index],
+        weatherCode: dailyResponse.data.daily.weather_code[index],
+      })),
     });
   } catch (error) {
     if (error.response?.status === 404) return res.status(404).json({ error: 'शहर नहीं मिला' });

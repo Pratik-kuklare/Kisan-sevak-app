@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
   const [weather, setWeather] = useState(null);
   const [mandi, setMandi] = useState(null);
   useEffect(() => {
-    api.getWeather('Pune').then(setWeather).catch(() => {});
+    api.getWeather({ city: 'Pune' }).then(setWeather).catch(() => {});
     api.getMandiPrices().then((result) => setMandi(result.prices[0])).catch(() => {});
   }, []);
   return (

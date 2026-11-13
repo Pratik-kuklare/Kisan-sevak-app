@@ -11,7 +11,13 @@ async function request(path, options = {}) {
 }
 
 export const api = {
-  getWeather: (city) => request(`/api/weather?city=${encodeURIComponent(city)}`),
+  getWeather: ({ city, latitude, longitude } = {}) => {
+    const params = new URLSearchParams();
+    if (city) params.set('city', city);
+    if (latitude !== undefined) params.set('latitude', latitude);
+    if (longitude !== undefined) params.set('longitude', longitude);
+    return request(`/api/weather?${params.toString()}`);
+  },
   getMandiPrices: () => request('/api/mandi/all'),
   sendChat: (message, language = 'hindi') => request('/api/chat', {
     method: 'POST',

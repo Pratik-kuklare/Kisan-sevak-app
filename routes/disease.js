@@ -1,5 +1,5 @@
 const express = require('express');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { generateWithRetry } = require('./gemini');
 
 const router = express.Router();
 
@@ -14,12 +14,10 @@ router.post('/', async (req, res, next) => {
   if (!/^[A-Za-z0-9+/=\r\n]+$/.test(base64Data)) return res.status(400).json({ error: 'image का base64 format अमान्य है' });
 
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: process.env.GEMINI_VISION_MODEL || 'gemini-3.8-flash' });
-    const result = await model.generateContent([
+    const result = await generateWithRetry(process.env.GEMINI_API_KEY, [
       'इस फसल की तस्वीर का विश्लेषण करें। केवल JSON में उत्तर दें: {"diseaseName":"...","symptoms":"...","treatment":"...","healthy":true या false}। उत्तर हिंदी (देवनागरी) में दें। यदि बीमारी नहीं है तो diseaseName में "कोई बीमारी नहीं" और healthy में true लिखें। कीटनाशक की सटीक मात्रा न बताएं; सुरक्षित रूप से कृषि विशेषज्ञ से सलाह लेने को कहें।',
       { inlineData: { data: base64Data.replace(/\s/g, ''), mimeType } },
-    ]);
+    ], process.env.GEMINI_VISION_MODEL);
     const text = result.response.text().replace(/^```json\s*|\s*```$/g, '').trim();
     let analysis;
     try {
@@ -29,6 +27,9 @@ router.post('/', async (req, res, next) => {
     }
     res.json(analysis);
   } catch (error) {
+    if ([429, 500, 503].includes(error.status || error.response?.status)) {
+      return res.status(503).json({ error: 'AI सेवा अभी व्यस्त है, कृपया कुछ देर बाद फिर प्रयास करें' });
+    }
     next(error);
   }
 });

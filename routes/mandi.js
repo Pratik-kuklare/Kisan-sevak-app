@@ -53,7 +53,10 @@ async function fetchLivePrices(crop) {
   const resourceId = process.env.MANDI_RESOURCE_ID || '9ef84268-d588-465a-a308-a864a43d0070';
   const params = { 'api-key': apiKey, format: 'json', limit: 100 };
   if (crop) params['filters[commodity]'] = cropNames[crop] || crop;
-  const response = await axios.get(`https://api.data.gov.in/resource/${resourceId}`, { params });
+  const response = await axios.get(`https://api.data.gov.in/resource/${resourceId}`, {
+    params,
+    timeout: 15000,
+  });
   return (response.data.records || []).map(normalize).filter((item) => item.marketPrice !== null);
 }
 
@@ -68,6 +71,9 @@ router.get('/', async (req, res, next) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
       return res.status(502).json({ error: 'लाइव मंडी API key अमान्य है' });
     }
+    if (error.code === 'EHOSTUNREACH' || error.code === 'ETIMEDOUT' || error.code === 'ECONNABORTED') {
+      return res.status(503).json({ error: 'लाइव मंडी सेवा इस समय नेटवर्क से उपलब्ध नहीं है, कृपया कुछ देर बाद फिर प्रयास करें' });
+    }
     next(error);
   }
 });
@@ -76,6 +82,12 @@ router.get('/all', async (req, res, next) => {
   try {
     res.json({ prices: await fetchLivePrices() });
   } catch (error) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      return res.status(502).json({ error: 'लाइव मंडी API key अमान्य है' });
+    }
+    if (error.code === 'EHOSTUNREACH' || error.code === 'ETIMEDOUT' || error.code === 'ECONNABORTED') {
+      return res.status(503).json({ error: 'लाइव मंडी सेवा इस समय नेटवर्क से उपलब्ध नहीं है, कृपया कुछ देर बाद फिर प्रयास करें' });
+    }
     next(error);
   }
 });
